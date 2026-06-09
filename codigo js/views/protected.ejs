@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Panel Protegido</title>
+</head>
+<body style="padding: 50px; font-family: sans-serif;">
+  <h1>Panel de Control</h1>
+  <p>Bienvenido de nuevo, <strong><%= user.username %></strong>.</p>
+
+  <% if (user.role === 'admin') { %>
+    <div style="background:#fff3cd; border: 1px solid #ffeeba; padding: 20px; border-radius: 8px;">
+      <h3>🔧 Funciones de Administrador</h3>
+      <p>Tienes acceso total para gestionar usuarios y configuraciones.</p>
+    </div>
+  <% } else { %>
+    <p>Acceso como usuario estandar.</p>
+  <% } %>
+
+  <br>
+  <a href="/">Ir al inicio</a>
+</body>
+</html>

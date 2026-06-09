@@ -1,0 +1,22 @@
+{
+  "name": "practica-nodejs-autenticacion-personalizada",
+  "version": "1.1.0",
+  "description": "Sistema de autenticacion con Node.js, Express, JWT, bcrypt y roles",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node --watch index.js",
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "Adolfo Abel Rosas Gutierrez",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "cookie-parser": "^1.4.7",
+    "db-local": "^3.1.0",
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2"
+  }
+}

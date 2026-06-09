@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Auth Personalizada</title>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+    .card { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 350px; }
+    input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 6px; }
+    button { width: 100%; padding: 10px; background: #1877f2; color: white; border: none; border-radius: 6px; cursor: pointer; }
+    .badge { background: #e7f3ff; color: #1877f2; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <% if (user) { %>
+      <h2>Hola, <%= user.username %> <span class="badge"><%= user.role %></span></h2>
+      <p>Has accedido correctamente.</p>
+      <button onclick="location.href='/protected'">Ir al Panel</button>
+      <button style="background:#606770; margin-top:10px" id="btn-logout">Cerrar Sesion</button>
+    <% } else { %>
+      <form id="auth-form">
+        <h2 style="text-align:center">Bienvenido</h2>
+        <input type="text" id="username" placeholder="Usuario" required>
+        <input type="password" id="password" placeholder="Contraseña" required>
+        <button type="submit" id="btn-login">Entrar</button>
+        <p style="text-align:center; font-size:0.9rem">¿No tienes cuenta? <a href="#" id="show-reg">Registrate aqui</a></p>
+        <span id="msg"></span>
+      </form>
+    <% } %>
+  </div>
+
+  <script>
+    const $ = (el) => document.querySelector(el)
+    const form = $('#auth-form')
+    const msg = $('#msg')
+    let isRegister = false
+
+    $('#show-reg')?.addEventListener('click', (e) => {
+      e.preventDefault()
+      isRegister = !isRegister
+      $('#btn-login').textContent = isRegister ? 'Registrarse' : 'Entrar'
+      $('#show-reg').textContent = isRegister ? 'Inicia sesion' : 'Registrate aqui'
+    })
+
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault()
+      const username = $('#username').value
+      const password = $('#password').value
+      const endpoint = isRegister ? '/register' : '/login'
+
+      const res = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      })
+
+      if (res.ok) {
+        if (isRegister) {
+          msg.textContent = 'Registrado. Ahora haz login.'
+          msg.style.color = 'green'
+        } else {
+          window.location.href = '/'
+        }
+      } else {
+        const data = await res.json()
+        msg.textContent = data.error
+        msg.style.color = 'red'
+      }
+    })
+
+    $('#btn-logout')?.addEventListener('click', async () => {
+      await fetch('/logout', { method: 'POST' })
+      window.location.href = '/'
+    })
+  </script>
+</body>
+</html>
